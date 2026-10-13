@@ -18,15 +18,24 @@ export default function ClassDetailPage({ params }: PageProps) {
   const { direction } = useTheme();
   const meta = DIRECTION_META[direction];
 
+  const [activeTab, setActiveTab] = useState<"schedule" | "students">("schedule");
+  const [activeDay, setActiveDay] = useState<DayOfWeek>("monday");
+  const [studentSearch, setStudentSearch] = useState("");
+
   if (!classData) {
     notFound();
   }
 
-  const [activeDay, setActiveDay] = useState<DayOfWeek>("monday");
-
   const currentDaySchedule = useMemo(() => {
     return classData.schedule.find((s) => s.dayId === activeDay);
   }, [classData, activeDay]);
+
+  const filteredStudents = useMemo(() => {
+    return classData.students.filter((s) => 
+      s.name.toLowerCase().includes(studentSearch.toLowerCase()) ||
+      s.id.toLowerCase().includes(studentSearch.toLowerCase())
+    );
+  }, [classData, studentSearch]);
 
   return (
     <main className="min-h-screen bg-background text-foreground pb-24">
@@ -95,22 +104,27 @@ export default function ClassDetailPage({ params }: PageProps) {
             </motion.div>
           </div>
 
-          {/* Quick Stats / Action */}
+          {/* Tab Selection */}
           <div className="lg:col-span-4 flex flex-col items-start lg:items-end gap-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="rounded-2xl border border-border/60 bg-surface/40 p-4 backdrop-blur-xl w-full lg:w-auto"
-            >
-              <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">Cập nhật lần cuối</div>
-              <div className="text-sm font-semibold">Thứ Hai, 12 Tháng 10, 2026</div>
-            </motion.div>
+            <div className="flex p-1 bg-surface/40 border border-border/60 rounded-xl backdrop-blur-xl">
+               <button
+                 onClick={() => setActiveTab("schedule")}
+                 className={`px-4 py-2 text-sm font-bold rounded-lg transition-all ${activeTab === "schedule" ? "bg-foreground text-background shadow-md" : "text-muted-foreground hover:text-foreground"}`}
+               >
+                 Thời khóa biểu
+               </button>
+               <button
+                 onClick={() => setActiveTab("students")}
+                 className={`px-4 py-2 text-sm font-bold rounded-lg transition-all ${activeTab === "students" ? "bg-foreground text-background shadow-md" : "text-muted-foreground hover:text-foreground"}`}
+               >
+                 Danh sách học sinh
+               </button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Main Content: Teacher & Schedule */}
+      {/* Main Content */}
       <section className="px-4 md:px-6 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Left Column: Teacher Info */}
@@ -121,7 +135,6 @@ export default function ClassDetailPage({ params }: PageProps) {
             transition={{ delay: 0.25 }}
             className="rounded-3xl border border-border/60 bg-surface/30 p-6 backdrop-blur-2xl shadow-xl overflow-hidden relative"
           >
-            {/* Background pattern */}
             <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-32 h-32 rounded-full blur-3xl opacity-20" style={{ backgroundColor: meta.accent }} />
 
             <h2 className="text-lg font-bold mb-6 flex items-center gap-2">
@@ -160,42 +173,12 @@ export default function ClassDetailPage({ params }: PageProps) {
                     <p className="text-xs font-medium">{classData.teacher.phone}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-lg bg-surface flex items-center justify-center border border-border/60 text-xs">⏰</div>
-                  <div className="min-w-0">
-                    <p className="text-[10px] text-muted-foreground uppercase leading-none mb-1">Tiếp PH-HS</p>
-                    <p className="text-xs font-medium">{classData.teacher.officeHours}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Class Committee */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="rounded-2xl border border-border/40 bg-surface/20 p-5 backdrop-blur-md"
-          >
-            <h2 className="text-sm font-bold mb-4 flex items-center gap-2">
-              <span>📋</span>
-              <span>Ban cán sự lớp</span>
-            </h2>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-2 rounded-lg hover:bg-surface/40 transition-colors">
-                <span className="text-xs text-muted-foreground">Lớp trưởng</span>
-                <span className="text-xs font-bold">{classData.classPresident}</span>
-              </div>
-              <div className="flex items-center justify-between p-2 rounded-lg hover:bg-surface/40 transition-colors">
-                <span className="text-xs text-muted-foreground">Bí thư</span>
-                <span className="text-xs font-bold">{classData.secretary}</span>
               </div>
             </div>
           </motion.div>
         </aside>
 
-        {/* Right Column: Schedule */}
+        {/* Right Column: Dynamic Content */}
         <div className="lg:col-span-8 space-y-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -203,108 +186,153 @@ export default function ClassDetailPage({ params }: PageProps) {
             transition={{ delay: 0.35 }}
             className="rounded-3xl border border-border/60 bg-surface/30 p-1 md:p-6 backdrop-blur-2xl shadow-xl min-h-[500px]"
           >
-            {/* Day Selection Tabs */}
-            <div className="flex flex-wrap items-center gap-2 mb-8 p-4 md:p-0">
-              {SCHOOL_INFO.schoolWeek.map((day) => {
-                const isActive = activeDay === day.id;
-                return (
-                  <button
-                    key={day.id}
-                    onClick={() => setActiveDay(day.id)}
-                    className={`relative rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
-                      isActive
-                        ? "text-background shadow-lg"
-                        : "text-muted-foreground hover:text-foreground hover:bg-surface/60"
-                    }`}
-                  >
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeDayBg"
-                        className="absolute inset-0 rounded-xl z-0"
-                        style={{ backgroundColor: meta.accent }}
-                      />
-                    )}
-                    <span className="relative z-10">{day.name}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Schedule List */}
-            <div className="space-y-3 p-4 md:p-0">
-              <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait">
+              {activeTab === "schedule" ? (
                 <motion.div
-                  key={activeDay}
+                  key="schedule"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.2 }}
-                  className="space-y-3"
                 >
-                  <div className="grid grid-cols-12 gap-4 px-4 py-2 text-[10px] uppercase tracking-widest text-muted-foreground/60 font-bold border-b border-border/20">
-                    <div className="col-span-2">Tiết</div>
-                    <div className="col-span-5">Môn học</div>
-                    <div className="col-span-5">Giáo viên / Phòng</div>
+                  {/* Day Selection Tabs */}
+                  <div className="flex flex-wrap items-center gap-2 mb-8 p-4 md:p-0">
+                    {SCHOOL_INFO.schoolWeek.map((day) => {
+                      const isActive = activeDay === day.id;
+                      return (
+                        <button
+                          key={day.id}
+                          onClick={() => setActiveDay(day.id)}
+                          className={`relative rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
+                            isActive
+                              ? "text-background shadow-lg"
+                              : "text-muted-foreground hover:text-foreground hover:bg-surface/60"
+                          }`}
+                        >
+                          {isActive && (
+                            <motion.div
+                              layoutId="activeDayBg"
+                              className="absolute inset-0 rounded-xl z-0"
+                              style={{ backgroundColor: meta.accent }}
+                            />
+                          )}
+                          <span className="relative z-10">{day.name}</span>
+                        </button>
+                      );
+                    })}
                   </div>
 
-                  {currentDaySchedule?.lessons.map((lesson, idx) => {
-                    const colors = SUBJECT_TYPE_COLORS[lesson.type];
-                    return (
-                      <motion.div
-                        key={`${activeDay}-${lesson.period}`}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.05 }}
-                        className="group grid grid-cols-12 gap-4 items-center rounded-2xl border border-border/40 bg-background/40 p-4 transition-all hover:bg-surface/60 hover:border-border/80"
-                      >
-                        <div className="col-span-2 flex flex-col">
-                          <span className="text-base font-black font-heading text-foreground/80 group-hover:text-foreground">
-                            {lesson.period}
-                          </span>
-                          <span className="text-[10px] text-muted-foreground font-mono">
-                            {lesson.time.split(" - ")[0]}
-                          </span>
-                        </div>
+                  {/* Schedule List */}
+                  <div className="space-y-3 p-4 md:p-0">
+                    <div className="grid grid-cols-12 gap-4 px-4 py-2 text-[10px] uppercase tracking-widest text-muted-foreground/60 font-bold border-b border-border/20">
+                      <div className="col-span-2">Tiết</div>
+                      <div className="col-span-5">Môn học</div>
+                      <div className="col-span-5">Giáo viên / Phòng</div>
+                    </div>
 
-                        <div className="col-span-5 flex flex-col gap-1.5">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-bold text-foreground">
-                              {lesson.subject}
+                    {currentDaySchedule?.lessons.map((lesson, idx) => {
+                      const colors = SUBJECT_TYPE_COLORS[lesson.type];
+                      return (
+                        <motion.div
+                          key={`${activeDay}-${lesson.period}`}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: idx * 0.05 }}
+                          className="group grid grid-cols-12 gap-4 items-center rounded-2xl border border-border/40 bg-background/40 p-4 transition-all hover:bg-surface/60 hover:border-border/80"
+                        >
+                          <div className="col-span-2 flex flex-col">
+                            <span className="text-base font-black font-heading text-foreground/80 group-hover:text-foreground">
+                              {lesson.period}
                             </span>
-                            <span className={`hidden sm:inline-block rounded-md ${colors.bg} ${colors.text} ${colors.border} border px-1.5 py-0.5 text-[9px] font-bold uppercase`}>
-                              {colors.label}
+                            <span className="text-[10px] text-muted-foreground font-mono">
+                              {lesson.time.split(" - ")[0]}
                             </span>
                           </div>
-                          <span className="text-[11px] text-muted-foreground sm:hidden">
-                            {colors.label}
-                          </span>
-                        </div>
 
-                        <div className="col-span-5 flex flex-col text-xs">
-                          <span className="text-foreground/90 font-medium truncate">
-                            {lesson.teacher}
-                          </span>
-                          <span className="text-muted-foreground flex items-center gap-1">
-                            <span className="text-[10px]">📍</span>
-                            {lesson.room || classData.room.split("(")[0]}
-                          </span>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
+                          <div className="col-span-5 flex flex-col gap-1.5">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-bold text-foreground">
+                                {lesson.subject}
+                              </span>
+                              <span className={`hidden sm:inline-block rounded-md ${colors.bg} ${colors.text} ${colors.border} border px-1.5 py-0.5 text-[9px] font-bold uppercase`}>
+                                {colors.label}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="col-span-5 flex flex-col text-xs">
+                            <span className="text-foreground/90 font-medium truncate">
+                              {lesson.teacher}
+                            </span>
+                            <span className="text-muted-foreground flex items-center gap-1">
+                              <span className="text-[10px]">📍</span>
+                              {lesson.room || classData.room.split("(")[0]}
+                            </span>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
                 </motion.div>
-              </AnimatePresence>
-            </div>
+              ) : (
+                <motion.div
+                  key="students"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-4 md:p-0"
+                >
+                  <div className="mb-6 relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">🔍</span>
+                    <input
+                      type="text"
+                      placeholder="Tìm kiếm học sinh theo tên hoặc mã số..."
+                      value={studentSearch}
+                      onChange={(e) => setStudentSearch(e.target.value)}
+                      className="w-full bg-background/40 border border-border/60 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
+                    />
+                  </div>
 
-            {/* Note */}
-            <div className="mt-8 pt-6 border-t border-border/20 px-4 md:px-0">
-              <div className="flex items-start gap-3 rounded-xl bg-primary/5 p-4 border border-primary/10">
-                <span className="text-lg">💡</span>
-                <div className="text-xs text-muted-foreground leading-relaxed">
-                  <strong className="text-foreground">Ghi chú:</strong> Thời khóa biểu áp dụng từ ngày 12/10/2026. Học sinh cần có mặt tại lớp trước 07:10 để chuẩn bị các tiết học buổi sáng. Các phòng chuyên môn (Tin học, Thí nghiệm) được ghi chú cụ thể theo từng tiết.
-                </div>
-              </div>
-            </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm text-left">
+                      <thead>
+                        <tr className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-bold border-b border-border/20">
+                          <th className="px-4 py-3">STT</th>
+                          <th className="px-4 py-3">Mã HS</th>
+                          <th className="px-4 py-3">Họ và Tên</th>
+                          <th className="px-4 py-3">Giới tính</th>
+                          <th className="px-4 py-3">Ngày sinh</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border/10">
+                        {filteredStudents.length > 0 ? (
+                          filteredStudents.map((student, idx) => (
+                            <tr key={student.id} className="hover:bg-surface/40 transition-colors">
+                              <td className="px-4 py-3 text-muted-foreground">{idx + 1}</td>
+                              <td className="px-4 py-3 font-mono text-xs">{student.id}</td>
+                              <td className="px-4 py-3 font-bold">{student.name}</td>
+                              <td className="px-4 py-3">
+                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${student.gender === "Nam" ? "bg-blue-500/10 text-blue-400" : "bg-pink-500/10 text-pink-400"}`}>
+                                  {student.gender}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 text-muted-foreground">{student.birthDate}</td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={5} className="px-4 py-10 text-center text-muted-foreground italic">
+                              Không tìm thấy học sinh nào phù hợp.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         </div>
       </section>

@@ -60,7 +60,7 @@ export default function ClassesPage() {
             transition={{ delay: 0.1 }}
             className="text-3xl font-heading font-extrabold tracking-tight md:text-5xl"
           >
-            Danh Sách Lớp Học
+            Thông Tin Lớp Học
           </motion.h1>
 
           <motion.p
@@ -69,7 +69,7 @@ export default function ClassesPage() {
             transition={{ delay: 0.15 }}
             className="text-muted-foreground text-sm md:text-base max-w-2xl leading-relaxed"
           >
-            Tra cứu nhanh thông tin giáo viên chủ nhiệm và thời khóa biểu từ thứ Hai đến thứ Bảy cho tất cả các khối lớp 10, 11 và 12.
+            Tra cứu nhanh thông tin giáo viên chủ nhiệm và thời khóa biểu từ thứ Hai đến thứ Bảy cho tất cả các khối lớp 6, 7, 8 và 9.
           </motion.p>
         </div>
 
@@ -91,7 +91,7 @@ export default function ClassesPage() {
               </span>
               <input
                 type="text"
-                placeholder="Tìm lớp (10A1, 11...), giáo viên chủ nhiệm, phòng học..."
+                placeholder="Tìm lớp (6B1, 7B2...), giáo viên chủ nhiệm, phòng học..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full rounded-xl border border-border/80 bg-background/80 py-2.5 pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
@@ -110,7 +110,7 @@ export default function ClassesPage() {
             {/* Filter buttons Khối */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
               <span className="text-xs font-semibold text-muted-foreground mr-1">Khối:</span>
-              {(["all", 10, 11, 12] as const).map((grade) => {
+              {(["all", 6, 7, 8, 9] as const).map((grade) => {
                 const isActive = selectedGrade === grade;
                 return (
                   <button

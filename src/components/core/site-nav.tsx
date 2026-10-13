@@ -7,9 +7,8 @@ import { DirectionPicker } from "./direction-picker";
 
 const LINKS = [
   { href: "/", label: "Trang chủ" },
-  { href: "/classes", label: "Danh sách lớp" },
-  { href: "/classes/10a1", label: "Thời khóa biểu mẫu" },
-  { href: "/showcase", label: "Hiệu ứng & UI" },
+  { href: "/school-info", label: "Thông tin trường" },
+  { href: "/classes", label: "Thông tin lớp" },
 ];
 
 export function SiteNav() {
@@ -65,10 +64,10 @@ export function SiteNav() {
             </span>
             <div className="flex flex-col">
               <span className="font-heading text-base font-semibold tracking-tight md:text-lg leading-tight">
-                EduMotion School
+                EduMotion Thường Thạnh
               </span>
               <span className="text-[10px] text-muted-foreground uppercase tracking-wider hidden sm:inline-block">
-                Cổng Tra Cứu Lớp & TKB
+                Cổng Thông Tin Học Đường
               </span>
             </div>
           </a>

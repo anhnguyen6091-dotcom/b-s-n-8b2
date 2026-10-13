@@ -62,10 +62,10 @@ function LuxuryHero({ accent, mounted, reduced }: { accent: string; mounted: boo
         transition={{ delay: 2.5, duration: 2 }}
       >
         <span className="text-[9px] tracking-[0.5em] uppercase text-muted-foreground/40 font-light">
-          No. 001
+          THCS THƯỜNG THẠNH
         </span>
         <span className="text-[9px] tracking-[0.5em] uppercase text-muted-foreground/40 font-light">
-          Collection 2026
+          NIÊN KHÓA 2026
         </span>
       </motion.div>
 
@@ -93,7 +93,7 @@ function LuxuryHero({ accent, mounted, reduced }: { accent: string; mounted: boo
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 1.0, duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
               >
-                Crafted for those who
+                Nuôi dưỡng những
               </motion.span>
             </span>
 
@@ -106,7 +106,7 @@ function LuxuryHero({ accent, mounted, reduced }: { accent: string; mounted: boo
                 animate={{ y: 0 }}
                 transition={{ delay: 1.3, duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
               >
-                Demand
+                Ước
               </motion.span>
             </span>
 
@@ -119,7 +119,7 @@ function LuxuryHero({ accent, mounted, reduced }: { accent: string; mounted: boo
                 animate={{ y: 0 }}
                 transition={{ delay: 1.6, duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
               >
-                More.
+                Mơ.
               </motion.span>
             </span>
           </h1>
@@ -131,9 +131,9 @@ function LuxuryHero({ accent, mounted, reduced }: { accent: string; mounted: boo
             transition={{ delay: 3.0, duration: 2 }}
             className="text-[11px] tracking-[0.25em] uppercase text-muted-foreground/50 font-extralight max-w-xs mx-auto leading-[2]"
           >
-            Ninety-five components. Four directions.
+            Trường THCS Thường Thạnh.
             <br />
-            One standard.
+            Hệ thống thông tin học đường hiện đại.
           </motion.p>
         </div>
       </div>
@@ -218,7 +218,7 @@ function CyberpunkHero({ accent, mounted, reduced }: { accent: string; mounted: 
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    const statuses = ["INITIALIZING", "LOADING_ASSETS", "COMPILING_SHADERS", "SYSTEM_READY"];
+    const statuses = ["SCHOOL_PORTAL", "LOADING_DATA", "DATABASE_SYNC", "SYSTEM_ONLINE"];
     let idx = 0;
     const interval = setInterval(() => {
       idx = Math.min(idx + 1, statuses.length - 1);
@@ -230,8 +230,8 @@ function CyberpunkHero({ accent, mounted, reduced }: { accent: string; mounted: 
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCounter(prev => prev < 99 ? prev + 1 : 99);
-    }, 20);
+      setCounter(prev => prev < 20 ? prev + 1 : 20);
+    }, 50);
     return () => clearInterval(interval);
   }, []);
 
@@ -245,14 +245,14 @@ function CyberpunkHero({ accent, mounted, reduced }: { accent: string; mounted: 
         className="flex items-center justify-between text-[10px] tracking-[0.2em] text-primary/60"
       >
         <div className="flex items-center gap-4">
-          <span className="cyber-flicker">SYS::{statusText}</span>
+          <span className="cyber-flicker">PORTAL::{statusText}</span>
           <span className="w-px h-3 bg-primary/30" />
-          <span>VER::4.0.1</span>
+          <span>YEAR::2026</span>
         </div>
         <div className="flex items-center gap-4">
-          <span>MEM::94%</span>
+          <span>DATA::99%</span>
           <span className="w-px h-3 bg-primary/30" />
-          <span>NODES::95+</span>
+          <span>CLASSES::20</span>
         </div>
       </motion.div>
 
@@ -267,18 +267,18 @@ function CyberpunkHero({ accent, mounted, reduced }: { accent: string; mounted: 
             className="lg:col-span-3 hidden lg:block"
           >
             <div className="cyber-clip border border-primary/20 p-4 space-y-3">
-              <div className="text-[9px] tracking-[0.2em] text-primary/50">COMPONENT_DATA</div>
-              {["GSAP", "FRAMER", "THREE.JS", "LENIS"].map((item, i) => (
+              <div className="text-[9px] tracking-[0.2em] text-primary/50">SCHOOL_SYSTEM_INFO</div>
+              {["STUDENTS", "TEACHERS", "SCHEDULE", "PORTAL"].map((item, i) => (
                 <div key={i} className="flex items-center justify-between text-[11px]">
                   <span className="text-primary/70">{item}</span>
-                  <span className="text-accent/80">[LOADED]</span>
+                  <span className="text-accent/80">[ACTIVE]</span>
                 </div>
               ))}
               <div className="h-px bg-primary/10 my-2" />
               <div className="text-[9px] text-primary/40">
-                {">"} DIRECTIONS: 4<br />
-                {">"} COMPONENTS: 95+<br />
-                {">"} STATUS: OPERATIONAL
+                {">"} GRADES: 6-9<br />
+                {">"} TOTAL_CLASSES: 20<br />
+                {">"} LOCATION: CAN_THO
               </div>
             </div>
           </motion.div>
@@ -303,8 +303,8 @@ function CyberpunkHero({ accent, mounted, reduced }: { accent: string; mounted: 
               transition={{ delay: 0.8, duration: 0.4 }}
               className="text-[clamp(1.5rem,4vw,3rem)] leading-tight mt-4"
             >
-              <span className="block text-foreground">BUILD_WEBSITES</span>
-              <span className="block neon-text" style={{ color: accent }}>THAT_WIN_AWARDS</span>
+              <span className="block text-foreground">THCS_THƯỜNG_THẠNH</span>
+              <span className="block neon-text" style={{ color: accent }}>CỔNG_THÔNG_TIN</span>
             </motion.h1>
 
             {/* Subtitle */}
@@ -314,7 +314,7 @@ function CyberpunkHero({ accent, mounted, reduced }: { accent: string; mounted: 
               transition={{ delay: 1.2 }}
               className="text-[11px] tracking-[0.15em] text-muted-foreground mt-6 max-w-sm"
             >
-              {">"} ANIMATION TOOLKIT FOR DEVELOPERS WHO REFUSE TO BUILD BORING
+              {">"} HỆ THỐNG TRA CỨU THỜI KHÓA BIỂU VÀ DANH SÁCH LỚP HỌC TRỰC TUYẾN
             </motion.p>
 
             {/* CTA buttons — angular, neon borders */}
@@ -325,17 +325,17 @@ function CyberpunkHero({ accent, mounted, reduced }: { accent: string; mounted: 
               className="flex items-center gap-4 mt-8"
             >
               <a
-                href="#components"
+                href="/classes"
                 className="cyber-clip-sm px-6 py-3 text-[11px] tracking-[0.15em] uppercase font-semibold neon-border"
                 style={{ color: accent }}
               >
-                EXPLORE::COMPONENTS
+                TRUY_CẬP::LỚP_HỌC
               </a>
               <a
-                href="#directions"
+                href="/school-info"
                 className="px-6 py-3 text-[11px] tracking-[0.15em] uppercase text-muted-foreground hover:text-primary border border-primary/20 hover:border-primary/50 transition-all duration-150"
               >
-                SEE::DIRECTIONS
+                XEM::THÔNG_TIN
               </a>
             </motion.div>
           </div>
@@ -348,12 +348,12 @@ function CyberpunkHero({ accent, mounted, reduced }: { accent: string; mounted: 
             className="lg:col-span-3 hidden lg:block"
           >
             <div className="cyber-clip border border-accent/20 p-4 space-y-3">
-              <div className="text-[9px] tracking-[0.2em] text-accent/50">SIGNAL_FEED</div>
+              <div className="text-[9px] tracking-[0.2em] text-accent/50">GRADE_LEVELS</div>
               {[
-                { label: "LUXURY", status: "ACTIVE" },
-                { label: "CYBERPUNK", status: "ACTIVE" },
-                { label: "KINETIC", status: "ACTIVE" },
-                { label: "FREESTYLE", status: "ACTIVE" },
+                { label: "GRADE_6", status: "ONLINE" },
+                { label: "GRADE_7", status: "ONLINE" },
+                { label: "GRADE_8", status: "ONLINE" },
+                { label: "GRADE_9", status: "ONLINE" },
               ].map((item, i) => (
                 <div key={i} className="flex items-center justify-between text-[11px]">
                   <span className="text-accent/70">{item.label}</span>
@@ -384,10 +384,10 @@ function CyberpunkHero({ accent, mounted, reduced }: { accent: string; mounted: 
         transition={{ delay: 1.8 }}
         className="flex items-center justify-between text-[10px] tracking-[0.15em] text-primary/40"
       >
-        <span>SCAN_COMPLETE</span>
+        <span>SYNC_COMPLETE</span>
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-          <span>AWAITING_INPUT</span>
+          <span>PORTAL_ACTIVE</span>
         </div>
       </motion.div>
     </div>
@@ -420,21 +420,21 @@ function KineticHero({ accent, mounted, reduced }: { accent: string; mounted: bo
             animate={{ scale: [1, 1.3, 1] }}
             transition={{ repeat: Infinity, duration: 2 }}
           />
-          <span style={{ color: accent }}>95+ Components</span>
+          <span style={{ color: accent }}>20 Lớp học • 800+ Học sinh</span>
           <motion.span
             className="text-xs px-2 py-0.5 rounded-full font-semibold"
             style={{ backgroundColor: `${accent}20`, color: accent }}
             animate={{ y: [0, -2, 0] }}
             transition={{ repeat: Infinity, duration: 2, delay: 0.5 }}
           >
-            NEW
+            2026
           </motion.span>
         </motion.div>
 
         {/* Big heading — per-character spring bounce */}
         <h1 className="text-[clamp(3rem,10vw,8rem)] leading-[0.95] mb-8">
           <span className="block">
-            {"Build Websites".split("").map((char, i) => (
+            {"Thường Thạnh".split("").map((char, i) => (
               <motion.span
                 key={i}
                 className="inline-block"
@@ -452,7 +452,7 @@ function KineticHero({ accent, mounted, reduced }: { accent: string; mounted: bo
             ))}
           </span>
           <span className="block kinetic-gradient">
-            {"That Win Awards".split("").map((char, i) => (
+            {"Portal School".split("").map((char, i) => (
               <motion.span
                 key={i}
                 className="inline-block"
@@ -484,8 +484,8 @@ function KineticHero({ accent, mounted, reduced }: { accent: string; mounted: bo
           transition={{ type: "spring", stiffness: 100, damping: 20, delay: 1.2 }}
           className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto leading-relaxed mb-12"
         >
-          The animation toolkit for developers who refuse to build boring.
-          GSAP + Framer Motion + Three.js + Lenis.
+          Cổng thông tin tra cứu thời khóa biểu và danh sách lớp học hiện đại.
+          Dành riêng cho học sinh và giáo viên trường THCS Thường Thạnh.
         </motion.p>
 
         {/* CTA buttons — big pill shapes, gradient fills */}
@@ -496,7 +496,7 @@ function KineticHero({ accent, mounted, reduced }: { accent: string; mounted: bo
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <motion.a
-            href="#components"
+            href="/classes"
             className="group relative px-8 py-4 rounded-full text-white font-semibold text-lg overflow-hidden shadow-xl"
             style={{
               background: `linear-gradient(135deg, ${accent}, hsl(172, 70%, 55%))`,
@@ -505,19 +505,19 @@ function KineticHero({ accent, mounted, reduced }: { accent: string; mounted: bo
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="relative z-10">Explore Components</span>
+            <span className="relative z-10">Xem danh sách lớp</span>
             <motion.div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
               style={{ background: `linear-gradient(135deg, hsl(172, 70%, 55%), ${accent})` }}
             />
           </motion.a>
           <motion.a
-            href="#directions"
+            href="/school-info"
             className="px-8 py-4 rounded-full text-foreground font-semibold text-lg border-2 border-border hover:border-primary/50 transition-all"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.98 }}
           >
-            See Directions
+            Thông tin trường
           </motion.a>
         </motion.div>
 
@@ -562,7 +562,7 @@ function FreestyleHero({ accent, mounted, reduced }: { accent: string; mounted: 
         transition={{ delay: 0.5, duration: 1.5 }}
       >
         <span className="text-[20vw] font-black whitespace-nowrap leading-none">
-          AWWWARDS
+          THƯỜNG THẠNH
         </span>
       </motion.div>
 
@@ -598,7 +598,7 @@ function FreestyleHero({ accent, mounted, reduced }: { accent: string; mounted: 
                 animate={!reduced ? { rotate: [-1, 0.5, -1] } : undefined}
                 transition={{ repeat: Infinity, duration: 6 }}
               >
-                EduMotion
+                Thường
               </motion.span>
             </motion.h1>
 
@@ -614,7 +614,7 @@ function FreestyleHero({ accent, mounted, reduced }: { accent: string; mounted: 
                 animate={!reduced ? { rotate: [1, -0.5, 1] } : undefined}
                 transition={{ repeat: Infinity, duration: 5 }}
               >
-                School
+                Thạnh
               </motion.span>
             </motion.h1>
 
@@ -625,7 +625,7 @@ function FreestyleHero({ accent, mounted, reduced }: { accent: string; mounted: 
               transition={{ delay: 0.7, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
               <span className="block">
-                Portal
+                School
               </span>
             </motion.h1>
 
@@ -668,11 +668,11 @@ function FreestyleHero({ accent, mounted, reduced }: { accent: string; mounted: 
               <span className="ml-auto text-2xl">→</span>
             </motion.a>
             <motion.a
-              href="/showcase"
+              href="/school-info"
               className="inline-flex w-full items-center border-[3px] border-foreground/30 px-5 py-4 text-base font-extrabold text-foreground/70 transition-all hover:translate-x-1 hover:-translate-y-1 hover:border-foreground hover:text-foreground sm:px-6 sm:text-lg"
               whileHover={{ rotate: 1 }}
             >
-              XEM HIỆU ỨNG UI
+              THÔNG TIN TRƯỜNG
               <span className="ml-auto text-2xl">↗</span>
             </motion.a>
           </div>
