@@ -6,7 +6,6 @@ import { useTheme, DIRECTION_META } from "@/lib/theme";
 import { DirectionPicker } from "./direction-picker";
 
 const LINKS = [
-  { href: "/", label: "Trang chủ" },
   { href: "/school-info", label: "Thông tin trường" },
   { href: "/classes", label: "Thông tin lớp" },
 ];
@@ -55,19 +54,19 @@ export function SiteNav() {
           `}
         >
           {/* Logo */}
-          <a href="/" className="group flex shrink-0 items-center gap-2.5">
+          <a href="/school-info" className="group flex shrink-0 items-center gap-2.5">
             <span
-              className="h-6 w-6 rounded-md transition-transform duration-300 group-hover:scale-110 flex items-center justify-center text-xs font-bold text-black"
+              className="h-7 w-7 rounded-xl transition-transform duration-300 group-hover:scale-110 flex items-center justify-center text-xs font-bold text-black shadow-md"
               style={{ backgroundColor: meta.accent, boxShadow: `0 0 20px ${meta.accent}55` }}
             >
-              🎓
+              🏫
             </span>
             <div className="flex flex-col">
-              <span className="font-heading text-base font-semibold tracking-tight md:text-lg leading-tight">
-                EduMotion Thường Thạnh
+              <span className="font-heading text-base font-bold tracking-tight md:text-lg leading-tight">
+                THCS Thường Thạnh
               </span>
               <span className="text-[10px] text-muted-foreground uppercase tracking-wider hidden sm:inline-block">
-                Cổng Thông Tin Học Đường
+                Cổng thông tin học đường
               </span>
             </div>
           </a>
@@ -78,7 +77,7 @@ export function SiteNav() {
               <a
                 key={link.label}
                 href={link.href}
-                className="group relative text-body-sm text-muted-foreground transition-colors hover:text-foreground"
+                className="group relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 {link.label}
                 <span
@@ -145,7 +144,7 @@ export function SiteNav() {
                 ))}
               </div>
               <p className="mb-3 mt-5 text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-                Design direction
+                Giao diện màu sắc
               </p>
               <DirectionPicker variant="inline" />
             </motion.nav>

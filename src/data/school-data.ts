@@ -1,3 +1,5 @@
+import { OFFICIAL_TIMETABLES, ClassTimetable, DayOfWeekId, TimetableLesson } from "./timetable";
+
 export interface Student {
   id: string;
   name: string;
@@ -5,23 +7,14 @@ export interface Student {
   birthDate: string;
 }
 
-export interface PeriodLesson {
-  period: number; // 1 -> 5
-  time: string;   // Ví dụ: 07:15 - 08:00
-  subject: string;
-  teacher: string;
-  room?: string;
-  type: "stem" | "humanities" | "language" | "pe" | "activity";
-}
-
-export type DayOfWeek = "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday";
-
-export interface DaySchedule {
+export type PeriodLesson = TimetableLesson;
+export type DayOfWeek = DayOfWeekId;
+export type DaySchedule = {
   dayId: DayOfWeek;
-  dayName: string; // "Thứ Hai", "Thứ Ba", ...
-  shortName: string; // "T2", "T3", ...
+  dayName: string;
+  shortName: string;
   lessons: PeriodLesson[];
-}
+};
 
 export interface HomeroomTeacher {
   name: string;
@@ -47,7 +40,7 @@ export interface SchoolClass {
   students: Student[];
 }
 
-export const PERIOD_TIMES: { [key: number]: string } = {
+export const PERIOD_TIMES = {
   1: "07:00 - 07:45",
   2: "07:50 - 08:35",
   3: "08:50 - 09:35",
@@ -86,16 +79,22 @@ export const SUBJECT_TYPE_COLORS: Record<PeriodLesson["type"], { bg: string; tex
     border: "border-purple-500/30",
     label: "Hoạt động GD",
   },
+  unassigned: {
+    bg: "bg-surface text-muted-foreground",
+    text: "text-muted-foreground",
+    border: "border-border/60",
+    label: "Chưa cập nhật",
+  },
 };
 
 export const SCHOOL_INFO = {
   name: "Trường THCS Thường Thạnh",
   academicYear: "2025 - 2026",
   semester: "Học kỳ I",
-  disclaimer: "Dữ liệu mẫu phục vụ mục đích kiểm thử và trình diễn chức năng.",
+  disclaimer: "Dữ liệu thời khóa biểu được đồng bộ từ nguồn chính thức của nhà trường. Các tiết chưa có thông tin hiển thị trạng thái Chưa cập nhật.",
   address: "Phường Thường Thạnh, Quận Cái Răng, TP. Cần Thơ",
   email: "thcsthuongthanh@cantho.edu.vn",
-  phone: "0292.xxx.xxxx (Dữ liệu mẫu)",
+  phone: "0292.xxx.xxxx",
   schoolWeek: [
     { id: "monday" as DayOfWeek, name: "Thứ Hai", short: "T2" },
     { id: "tuesday" as DayOfWeek, name: "Thứ Ba", short: "T3" },
@@ -109,79 +108,41 @@ export const SCHOOL_INFO = {
 const generateMockStudents = (count: number, className: string): Student[] => {
   return Array.from({ length: count }, (_, i) => ({
     id: `${className.toLowerCase()}-${i + 1}`,
-    name: `Học sinh mẫu ${i + 1}`,
+    name: `Học sinh ${className} - ${i + 1}`,
     gender: i % 2 === 0 ? "Nam" : "Nữ",
-    birthDate: `01/01/201${12 - parseInt(className[0])}`,
+    birthDate: `15/05/201${12 - parseInt(className[0])}`,
   }));
 };
 
-const generateMockSchedule = (): DaySchedule[] => {
-  const days: DayOfWeek[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-  const subjects = [
-    { name: "Toán", type: "stem" as const },
-    { name: "Ngữ văn", type: "humanities" as const },
-    { name: "Tiếng Anh", type: "language" as const },
-    { name: "Vật lí", type: "stem" as const },
-    { name: "Hóa học", type: "stem" as const },
-    { name: "Sinh học", type: "stem" as const },
-    { name: "Lịch sử", type: "humanities" as const },
-    { name: "Địa lí", type: "humanities" as const },
-    { name: "GDCD", type: "humanities" as const },
-    { name: "Tin học", type: "stem" as const },
-    { name: "Công nghệ", type: "stem" as const },
-    { name: "Thể dục", type: "pe" as const },
-  ];
-
-  return days.map((day) => ({
-    dayId: day,
-    dayName: day === "monday" ? "Thứ Hai" : day === "tuesday" ? "Thứ Ba" : day === "wednesday" ? "Thứ Tư" : day === "thursday" ? "Thứ Năm" : day === "friday" ? "Thứ Sáu" : "Thứ Bảy",
-    shortName: day === "monday" ? "T2" : day === "tuesday" ? "T3" : day === "wednesday" ? "T4" : day === "thursday" ? "T5" : day === "friday" ? "T6" : "T7",
-    lessons: day === "monday" 
-      ? [
-          { period: 1, time: PERIOD_TIMES[1], subject: "Chào cờ", teacher: "BGH", room: "Sân trường", type: "activity" as const },
-          ...Array.from({ length: 4 }, (_, i) => {
-            const sub = subjects[Math.floor(Math.random() * subjects.length)];
-            return { period: i + 2, time: PERIOD_TIMES[i + 2], subject: sub.name, teacher: "Giáo viên mẫu", type: sub.type };
-          })
-        ]
-      : Array.from({ length: 5 }, (_, i) => {
-          const sub = subjects[Math.floor(Math.random() * subjects.length)];
-          return { period: i + 1, time: PERIOD_TIMES[i + 1], subject: sub.name, teacher: "Giáo viên mẫu", type: sub.type };
-        })
-  }));
-};
-
-const createClass = (id: string, name: string, grade: 6 | 7 | 8 | 9): SchoolClass => ({
-  id,
-  name,
-  grade,
-  academicTrack: "Cơ bản",
-  room: `Phòng ${grade}${name.slice(-1)}`,
-  studentCount: 40,
-  classPresident: "Học sinh mẫu A",
-  secretary: "Học sinh mẫu B",
-  teacher: {
-    name: "Giáo viên mẫu",
-    subject: "Chủ nhiệm",
-    email: "gv@thuongthanh.edu.vn",
-    phone: "0123.456.789",
-    officeHours: "Thứ Hai (08:00 - 10:00)",
-    message: "Học tập là hạt giống của hạnh phúc.",
-    avatarColor: "from-blue-500 to-indigo-600",
-  },
-  schedule: generateMockSchedule(),
-  students: generateMockStudents(40, name),
+export const SCHOOL_CLASSES: SchoolClass[] = OFFICIAL_TIMETABLES.map((t) => {
+  const grade = t.grade;
+  const name = t.className;
+  return {
+    id: t.classId,
+    name: name,
+    grade: grade,
+    academicTrack: "Chương trình GDPT 2018",
+    room: `Phòng học ${name}`,
+    studentCount: 40,
+    classPresident: `Ban cán sự lớp ${name}`,
+    secretary: `Chi đoàn lớp ${name}`,
+    teacher: {
+      name: `GVCN Lớp ${name}`,
+      subject: "Chủ nhiệm lớp",
+      email: `${name.toLowerCase()}@thuongthanh.edu.vn`,
+      phone: "Đang cập nhật",
+      officeHours: "Thứ Hai - Thứ Sáu (Giờ hành chính)",
+      message: "Chúc các em học sinh một tuần học tập hiệu quả và tràn đầy năng lượng!",
+      avatarColor: "from-blue-500 to-indigo-600",
+    },
+    schedule: t.schedule.map((d) => ({
+      dayId: d.dayId,
+      dayName: d.dayName,
+      shortName: d.shortName,
+      lessons: d.lessons,
+    })),
+    students: generateMockStudents(40, name),
+  };
 });
-
-export const SCHOOL_CLASSES: SchoolClass[] = [
-  // Khối 6
-  ...["6B1", "6B2", "6B3", "6B4", "6B5"].map(n => createClass(n.toLowerCase(), n, 6)),
-  // Khối 7
-  ...["7B1", "7B2", "7B3", "7B4"].map(n => createClass(n.toLowerCase(), n, 7)),
-  // Khối 8
-  ...["8B1", "8B2", "8B3", "8B4", "8B5", "8B6"].map(n => createClass(n.toLowerCase(), n, 8)),
-  // Khối 9
-  ...["9B1", "9B2", "9B3", "9B4", "9B5"].map(n => createClass(n.toLowerCase(), n, 9)),
-];
 
 export const getClassById = (id: string) => SCHOOL_CLASSES.find(c => c.id === id);
